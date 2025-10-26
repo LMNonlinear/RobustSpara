@@ -1,16 +1,40 @@
 # RobustXiAlpha
 
-RobustXiAlpha is a MATLAB toolbox for robustly decomposing quantitative EEG (qEEG) power spectra into aperiodic (``\xi``) and oscillatory (alpha-band) constituents. It wraps the `BiXiAlpha` class and several companion utilities that smooth spectra, initialize non-linear fits, and export parameter tables for downstream normative modelling.
+RobustSpecPara is a MATLAB toolbox for robustly decomposing quantitative EEG (qEEG) power spectra into aperiodic (``\xi``) and oscillatory (alpha-band) constituents. It wraps the `BiXiAlpha` class and several companion utilities that smooth spectra, initialize non-linear fits, and export parameter tables for downstream normative modelling.
 
 ## Highlights
 - Implements Lorentzian aperiodic and Gaussian oscillatory kernels that are jointly optimized with Levenberg-Marquardt for stable estimates of the ``\xi`` slope, offsets, peak frequency, bandwidth, and power.
 - Provides scripts that process HarMNqEEG cross-spectra and export channel-wise tables of alpha and ``\xi`` parameters for normative analyses.
-- Ships quality metrics (e.g., weighted R^2) and helpers for smoothing, bounds handling, bispectral statistics, and table manipulation.
-- Ready to integrate with broader qMEEG pipelines by reusing the existing QMEEG utilities (e.g., `get_subtable`, `test_folder`) and parallel execution helpers (`startmatlabpool`).
+- Ships quality metrics (e.g., weighted R^2) and helpers for smoothing, bounds handling, and table manipulation.
+
 
 ## Methodological Context
-- **Multinational data workflow** - As described in *xialpha_Age_V4_method_biorxiv2.docx*, HarMNqEEG recordings originate from 14 studies conducted in 9 countries on 12 EEG devices. Data contributors run a shared script locally, upload only cross-spectra plus metadata (age, sex, country, device), and the central site harmonizes batches after anonymisation via Arng2. RobustXiAlpha's examples mirror this decentralised ingest.
-- **Robust spectral parametrisation** - Following the same method note, the aperiodic background is modelled with a Lorentzian kernel (height ``h``, exponent ``\chi``, knee, and baseline), while periodic peaks are Gaussian (centre ``\mu``, scale ``\sigma``, amplitude ``h``). Both components are fitted simultaneously to the linear-scale PSD, avoiding the multiplicative assumptions made by log-domain approaches such as FOOOF.
+
+### Robust EEG Spectral Parametrization
+RobustSpecPara implements a principled approach to decompose EEG power spectra into two fundamental components:
+
+1. **Aperiodic (ξ) Component** - The 1/f background activity
+   - Modelled using a **Lorentzian kernel** with parameters:
+     - **χ (chi)**: Exponent controlling the slope of the aperiodic background
+     - **h (height)**: Amplitude of the aperiodic component
+     - **μ (mu)**: Knee frequency (transition point)
+     - **Baseline offsets**: Intercept terms for flexible baseline fitting
+   - Captures the broadband spectral characteristics independent of oscillatory activity
+   - Robust to variations in recording conditions and electrode impedance
+
+2. **Oscillatory (α) Component** - Periodic activity (e.g., alpha rhythm)
+   - Modelled using **Gaussian kernels** with parameters:
+     - **μ (mu)**: Peak frequency (centre of the oscillation)
+     - **σ (sigma)**: Bandwidth (width of the peak)
+     - **h (height)**: Amplitude of the oscillatory component
+   - Captures narrow-band oscillations superimposed on the aperiodic background
+   - Multiple peaks can be detected across frequency bands (delta, theta, alpha, beta)
+
+3. **Joint Optimization**
+   - Both components are fitted **simultaneously** to the linear-scale PSD
+   - Uses **Levenberg-Marquardt** non-linear optimization for stable parameter estimates
+   - Avoids multiplicative assumptions made by log-domain approaches (e.g., FOOOF)
+   - Elastic constraint regularization prevents overfitting and ensures physiologically plausible solutions
 
 ## Repository Layout
 - `utility/` - Core helpers: smoothing kernels, bounds classification, Jacobian estimation, conversions, plotting, table utilities, etc.
@@ -21,8 +45,7 @@ RobustXiAlpha is a MATLAB toolbox for robustly decomposing quantitative EEG (qEE
 ## Requirements
 - MATLAB R2021a or newer (tested with >= R2022b).
 - Signal Processing Toolbox (for PSD utilities) and Parallel Computing Toolbox (scripts use `parfor`).
-- Access to HarMNqEEG spectral tables or your own PSD matrices with compatible metadata.
-- The broader QMEEG utility set on the MATLAB path (for functions such as `test_folder`).
+- Access to HarMNqEEG spectral tables or your own PSD matrices.
 
 ## Installation & Setup
 1. Clone or download `RobustXiAlpha` into your MATLAB workspace.
@@ -32,50 +55,98 @@ RobustXiAlpha is a MATLAB toolbox for robustly decomposing quantitative EEG (qEE
    addpath(genpath(fullfile(pwd, 'external')));
    addpath(genpath(fullfile(pwd, 'example')));
    ```
-3. Ensure the QMEEG shared utilities that provide `test_folder`, `get_folders_in_directory`, etc., are also on the path.
-4. If you plan to use parallel execution, confirm that a MATLAB parallel pool can be opened (`parpool`, or the provided `startmatlabpool` wrapper).
+3. If you plan to use parallel execution, confirm that a MATLAB parallel pool can be opened (`parpool`, or the provided `startmatlabpool` wrapper).
 
 ## Quick Start
-1. **Prepare cross-spectra** - Follow the HarMNqEEG workflow or adapt your own dataset into tables matching `example/qMEEG/data/HarMNqEEG/ystarlog_1563.csv`, with frequency (`freq`) columns plus channel-wise log power entries.
-2. **Run the smoothing + fit demo** - Execute `demo_xialpha_ystar_smooth_lorenz_gaussian.m`. The script:
-   - Boots a parallel pool (up to 20 workers).
-   - Reads a subject's cross-spectrum, smooths it via local Gaussian kernels (`NwSmoothInline`), and assembles the `hos` structure (`f`, `s`, `Fs`, metadata).
-   - Instantiates `BiXiAlpha` objects for each EEG channel, switches on robust elastic constraints, and fits both aperiodic and alpha components.
-   - Saves channel-wise results under `result/qMEEG/<task_name>/subj_<id>.mat` and renders diagnostic plots (`xialpha(ichan).show`).
-3. **Extract developmental trajectories** - Run `demo_xialpha_ystar_trajectory_1.m` on the saved `.mat` files. It iterates over all channels, collates per-band alpha peaks (delta/theta/alpha/beta), exports:
-   - `T_alpha_hoxialpha*.csv` with every detected peak,
-   - `T_xi_hoxialpha*.csv` with the Lorentzian exponents/offsets,
-   - `T_alpha_band_hoxialpha*.csv` with the strongest peak per canonical band.
+
+### Option 1: Simple Spectral Decomposition (Recommended for New Users)
+Execute `main_robust_s_para.m` for a straightforward example:
+```matlab
+run('example/main_robust_s_para.m')
+```
+This script:
+- Loads a sample power spectrum from `data/Spec_example.csv` (47 frequency bins, log-scale).
+- Converts log-scale PSD to linear scale and applies Nadaraya-Watson smoothing.
+- Fits a single BiXiAlpha model decomposing the spectrum into:
+  - **Aperiodic (ξ) component**: Lorentzian kernel capturing the 1/f background.
+  - **Oscillatory (α) component**: Gaussian kernel capturing the alpha-band peak.
+- Saves fitted parameters to `results/robust_s_para/robust_s_para_analysis/xialpha_result.mat`.
+- Supports debug mode (single channel) or parallel processing (all channels).
 
 ## Input Specification
-The main entry point (`BiXiAlpha`) expects:
-- `f` - frequency vector (Hz) sampled uniformly, typically <= 20 Hz for HarMNqEEG.
-- `s` - power spectral density values (linear scale), columns per channel.
-- `bs` *(optional)* - bispectral terms; pass `[]` if not available.
-- `ks`, `kh` - taper parameters for spectral smoothing (default 4 / 8 in demos).
-- `Fs` - sampling rate (Hz) used for normalisation.
-Metadata (age, sex, country, device, dataset) are attached to each `BiXiAlpha` instance via the `.info` struct.
+The main entry point expects:
+- **`f`** - Frequency vector (Hz) sampled uniformly, typically 1–47 Hz for HarMNqEEG or custom ranges.
+- **`s`** - Power spectral density values (linear scale, not log). Columns represent channels; rows represent frequency bins.
+  - Input data should be in **linear scale** (not dB or log). If your data is log-scale, convert using `s_linear = exp(s_log)`.
+- **`bs`** *(optional)* - Bispectral terms for higher-order spectral analysis; pass `[]` if not available.
+- **`ks`, `kh`** - Taper parameters for spectral smoothing:
+  - `ks` (default 4): Number of harmonics for the aperiodic (ξ) component.
+  - `kh` (default 8): Number of harmonics for the oscillatory (α) component.
+  - Higher values increase model complexity; typical range is 3–10.
+- **`Fs`** - Sampling rate (Hz) used for normalisation; typically `2 × max(f)`.
+
+### Data Preparation
+- **Log-to-linear conversion**: If your input is log-scale PSD (common in qEEG), convert using `s = exp(s_log)`.
+- **Smoothing**: Apply Nadaraya-Watson or other kernel smoothing to reduce noise (see `psd_smooth_nw` helper).
+- **Metadata**: Age, sex, country, device, and dataset information are attached to each `BiXiAlpha` instance via the `.info` struct for downstream normative modelling.
 
 ## Outputs
-For every channel, `BiXiAlpha` stores:
-- `para_xi.kernel.para` - Lorentzian parameters (`chi`, `h`, `mu`, offsets) governing the aperiodic ``\xi`` component.
-- `para_alpha.kernel.para` - Gaussian peak parameters (`mu`, `sigma`, `h`) for the dominant alpha rhythm.
-- `r2`, `r2w`, `r2_s` - Quality-of-fit metrics (plain and variance-weighted).
-- `loss`, `regularization`, `lambda` - Optimisation settings used to reach the solution.
-Saved `.mat` files preserve arrays of `BiXiAlpha` objects that can be reloaded for additional analysis, plotting, or band-specific summarisation.
+For every channel, `BiXiAlpha` stores comprehensive fitted parameters and quality metrics:
+
+### Aperiodic (ξ) Component Parameters
+- **`para_xi.kernel.para`** - Lorentzian parameters:
+  - **χ (chi)**: Exponent of the aperiodic slope (typically 0.5–2.5)
+  - **h (height)**: Amplitude of the aperiodic component
+  - **μ (mu)**: Knee frequency (transition point)
+  - **Baseline offsets**: Intercept terms for flexible baseline fitting
+
+### Oscillatory (α) Component Parameters
+- **`para_alpha.kernel.para`** - Gaussian peak parameters (one or more peaks):
+  - **μ (mu)**: Peak frequency (Hz)
+  - **σ (sigma)**: Bandwidth (Hz)
+  - **h (height)**: Amplitude of the oscillatory component
+
+### Quality-of-Fit Metrics
+- **`r2`** - Coefficient of determination (plain R²)
+- **`r2w`** - Variance-weighted R² (recommended when observation variances are known)
+- **`r2_s`** - Spectral R² (alternative metric)
+- **`loss`** - Final optimization loss value
+- **`regularization`** - Type of regularization applied (e.g., `elastic_constraint_mu_sigma_chi_xi`)
+- **`lambda`** - Regularization weights for different parameters
+
+### Saved Results
+Saved `.mat` files preserve arrays of `BiXiAlpha` objects that can be reloaded for:
+- Additional analysis and visualization
+- Band-specific summarisation (delta, theta, alpha, beta)
+- Normative modelling and developmental trajectory analysis
+- Quality control and outlier detection
+
+## Algorithm Features & Advantages
+
+### Key Strengths
+1. **Simultaneous Decomposition** - Aperiodic and oscillatory components are fitted jointly, avoiding the independence assumptions of sequential approaches.
+2. **Linear-Scale Fitting** - Operates on linear-scale PSD rather than log-scale, preserving the natural variance structure and avoiding multiplicative bias.
+3. **Robust Regularization** - Elastic constraint regularization prevents overfitting and ensures physiologically plausible parameter estimates.
+4. **Flexible Kernel Choices** - Supports Lorentzian (aperiodic) and Gaussian (oscillatory) kernels; can be extended with alternative kernels.
+5. **Multi-Peak Detection** - Capable of detecting and characterizing multiple oscillatory peaks across frequency bands.
+6. **Quality Metrics** - Provides variance-weighted R² and other diagnostics for model assessment and outlier detection.
+7. **Parallel Processing** - Scales efficiently to large datasets via MATLAB's `parfor` loops.
+
+### Use Cases
+- **Developmental studies**: Track age-related changes in aperiodic slope and alpha peak characteristics.
+- **Clinical applications**: Identify biomarkers for neurological or psychiatric conditions.
+- **Pharmacological studies**: Assess drug effects on spectral parameters.
+- **Multi-site harmonization**: Standardize spectral decomposition across different EEG devices and recording protocols.
+- **Normative modelling**: Build age- and sex-adjusted reference surfaces for clinical interpretation.
 
 ## Quality Control & Harmonisation
-- Use the weighted R^2 (`calc_r2w`) to compare model and empirical spectra when observation variances are known.
+- Use the weighted R² (`calc_r2w`) to compare model and empirical spectra when observation variances are known.
 - The method note recommends screening outliers using global z-scores derived from age-adjusted normative surfaces and harmonising batches with ComBat-like adjustments before fitting; apply those steps upstream when processing multi-site data.
-
-## Extending the Toolbox
-- Replace or augment `psd_smooth_nw` with alternative smoothers (`LLSmooth`, Savitzky-Golay) as needed.
-- Toggle `xialpha(:,ich).peak_relation`, `regularization`, or `lambda` to enforce anatomical priors (e.g., harmonic constraints) or relax elastic penalties.
-- Batch-processing scripts can be adapted to other montages by updating channel headers (`get_spec_hearder`) and metadata handling.
+- Inspect diagnostic plots via `xialpha(ichan).show` to visually assess fit quality and identify problematic spectra.
 
 ## License
 This project is distributed under the GNU General Public License v3.0 (see `LICENSE`).
 
 ## Authors
 Ying Wang && Min Li
-
+Oct 20, 2025
