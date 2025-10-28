@@ -1,4 +1,10 @@
 # RobustXiAlpha
+% Author: Ying Wang, Min Li
+% Create Time: 2025
+% Copyright (c): 2020-2025 Ying Wang, yingwangrigel@gmail.com,
+%                Min Li, minli.231314@gmail.com
+% Joint China-Cuba LAB, UESTC, Hangzhou Dianzi Univerisity 
+% License: GNU General Public License v3.0 (see LICENSE file)
 
 RobustSpecPara is a MATLAB toolbox for robustly decomposing quantitative EEG (qEEG) power spectra into aperiodic (``\xi``) and oscillatory (alpha-band) constituents. It wraps the `BiXiAlpha` class and several companion utilities that smooth spectra, initialize non-linear fits, and export parameter tables for downstream normative modelling.
 
@@ -36,11 +42,6 @@ RobustSpecPara implements a principled approach to decompose EEG power spectra i
    - Avoids multiplicative assumptions made by log-domain approaches (e.g., FOOOF)
    - Elastic constraint regularization prevents overfitting and ensures physiologically plausible solutions
 
-## Repository Layout
-- `utility/` - Core helpers: smoothing kernels, bounds classification, Jacobian estimation, conversions, plotting, table utilities, etc.
-- `external/HoXiAlpha/` - The `BiXiAlpha` class definition and optimisation routines shared with the HoXiAlpha project.
-- `external/` *(others)* - Third-party resources used by the toolbox (parallel helpers, colormaps, detrending, brain eigenmodes).
-- `example/qMEEG/` - End-to-end scripts demonstrating how to read HarMNqEEG cross-spectra, run RobustXiAlpha fits, and export summary tables.
 
 ## Requirements
 - MATLAB R2021a or newer (tested with >= R2022b).
@@ -116,12 +117,7 @@ For every channel, `BiXiAlpha` stores comprehensive fitted parameters and qualit
 
 ### Saved Results
 Saved `.mat` files preserve arrays of `BiXiAlpha` objects that can be reloaded for:
-- Additional analysis and visualization
-- Band-specific summarisation (delta, theta, alpha, beta)
-- Normative modelling and developmental trajectory analysis
-- Quality control and outlier detection
 
-## Algorithm Features & Advantages
 
 ### Key Strengths
 1. **Simultaneous Decomposition** - Aperiodic and oscillatory components are fitted jointly, avoiding the independence assumptions of sequential approaches.
@@ -132,17 +128,27 @@ Saved `.mat` files preserve arrays of `BiXiAlpha` objects that can be reloaded f
 6. **Quality Metrics** - Provides variance-weighted R² and other diagnostics for model assessment and outlier detection.
 7. **Parallel Processing** - Scales efficiently to large datasets via MATLAB's `parfor` loops.
 
-### Use Cases
-- **Developmental studies**: Track age-related changes in aperiodic slope and alpha peak characteristics.
-- **Clinical applications**: Identify biomarkers for neurological or psychiatric conditions.
-- **Pharmacological studies**: Assess drug effects on spectral parameters.
-- **Multi-site harmonization**: Standardize spectral decomposition across different EEG devices and recording protocols.
-- **Normative modelling**: Build age- and sex-adjusted reference surfaces for clinical interpretation.
+## Citation
 
-## Quality Control & Harmonisation
-- Use the weighted R² (`calc_r2w`) to compare model and empirical spectra when observation variances are known.
-- The method note recommends screening outliers using global z-scores derived from age-adjusted normative surfaces and harmonising batches with ComBat-like adjustments before fitting; apply those steps upstream when processing multi-site data.
-- Inspect diagnostic plots via `xialpha(ichan).show` to visually assess fit quality and identify problematic spectra.
+If you use this toolkit, please cite:
+
+```
+1. Wang, Y. et al. Whole brain resting-state EEG dynamic: A mixture of linear aperiodic and nonlinear resonant stochastic processes. Preprint at https://doi.org/10.1101/2025.06.27.661950 (2025).
+2. Li, M. et al. Aperiodic and Periodic EEG Component Lifespan Trajectories: Monotonic Decrease versus Growth-then-Decline. 2025.08.26.672407 Preprint at https://doi.org/10.1101/2025.08.26.672407 (2025).
+3. Li, M. et al. Harmonized-Multinational qEEG norms (HarMNqEEG). NeuroImage 256, 119190 (2022).
+---
+
+## Data link:
+1-The shared raw cross-spectra with encrypted ID is hosted at
+Synapse.org (10.7303/syn26712693) and complete access is possible
+after login in the system. 
+2-The multinational harmonized norms (HarMNqEEG norms) of traditional log-spectra and Riemannian cross-spectra
+are hosted at Synapse.org (10.7303/syn26712979).
+## Code link
+1-The HarMNqEEG code for calculating the z-scores based on
+the HarMNqEEG norm opened in GitHub, see: https://github.com/LMNonlinear/HarMNqEEG.
+2-The qEEG with linearlized aperiodic and periodic norms toolbox is in https://github.com/LMNonlinear/AP-qEEG
+---
 
 ## License
 This project is distributed under the GNU General Public License v3.0 (see `LICENSE`).
@@ -150,3 +156,5 @@ This project is distributed under the GNU General Public License v3.0 (see `LICE
 ## Authors
 Ying Wang && Min Li
 Oct 20, 2025
+
+
