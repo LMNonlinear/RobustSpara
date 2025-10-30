@@ -1,3 +1,10 @@
+﻿% Author: Ying Wang, Min Li
+% Create Time: 2025
+% Copyright (c): 2020-2025 Ying Wang, yingwangrigel@gmail.com,
+%                Min Li, minli.231314@gmail.com
+% Joint China-Cuba LAB, UESTC, Hangzhou Dianzi University
+% License: GNU General Public License v3.0 (see LICENSE file)
+
 function R2w = calc_r2w(x, x_hat, x_variance)
 %CALC_R2W Calculate Weighted R-squared for Observed and Predicted Data
 %
@@ -20,14 +27,14 @@ function R2w = calc_r2w(x, x_hat, x_variance)
 %       x_hat = [12; 14; 19; 24; 28];
 %       x_variance = [2; 3; 2.5; 4; 3.5];
 %       R2w = calc_r2w(x, x_hat, x_variance);
-%       fprintf('Weighted R²: %.4f\n', R2w);
+%       fprintf('Weighted R虏: %.4f\n', R2w);
 %
 %       % --- Example 2: Matrix Data ---
 %       x = [1, 2, 3; 4, 5, 6];
 %       x_hat = [1.1, 1.9, 3.2; 3.8, 5.1, 6.3];
 %       x_variance = [0.1, 0.2, 0.3; 0.2, 0.1, 0.4];
 %       R2w = calc_r2w(x, x_hat, x_variance);
-%       fprintf('Weighted R²: %.4f\n', R2w);
+%       fprintf('Weighted R虏: %.4f\n', R2w);
 %
 %       % --- Example 3: Applying to Complex Data ---
 %       M = 50; N = 50;
@@ -41,17 +48,17 @@ function R2w = calc_r2w(x, x_hat, x_variance)
 %
 %       x_variance = rand(M, N) + 1; % Ensure positive variances
 %
-%       % Calculate Weighted R² for Real Part
+%       % Calculate Weighted R虏 for Real Part
 %       R2w_real = calc_r2w(real(x_complex), real(x_hat_complex), x_variance);
-%       fprintf('Weighted R² (Real Part): %.4f\n', R2w_real);
+%       fprintf('Weighted R虏 (Real Part): %.4f\n', R2w_real);
 %
-%       % Calculate Weighted R² for Imaginary Part
+%       % Calculate Weighted R虏 for Imaginary Part
 %       R2w_imag = calc_r2w(imag(x_complex), imag(x_hat_complex), x_variance);
-%       fprintf('Weighted R² (Imaginary Part): %.4f\n', R2w_imag);
+%       fprintf('Weighted R虏 (Imaginary Part): %.4f\n', R2w_imag);
 %
-%       % Combined R² can be computed externally as needed
+%       % Combined R虏 can be computed externally as needed
 %       R2w_combined = (R2w_real + R2w_imag) / 2;
-%       fprintf('Weighted R² (Combined): %.4f\n', R2w_combined);
+%       fprintf('Weighted R虏 (Combined): %.4f\n', R2w_combined);
 %
 
     %% 1. Input Validation

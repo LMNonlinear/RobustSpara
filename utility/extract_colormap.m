@@ -1,3 +1,10 @@
+﻿% Author: Ying Wang, Min Li
+% Create Time: 2025
+% Copyright (c): 2020-2025 Ying Wang, yingwangrigel@gmail.com,
+%                Min Li, minli.231314@gmail.com
+% Joint China-Cuba LAB, UESTC, Hangzhou Dianzi University
+% License: GNU General Public License v3.0 (see LICENSE file)
+
 function CM = extract_colormap(imagePath, numColor)
     % Extracts a colormap from an image with interpolation to a specified number of colors.
     %
@@ -11,7 +18,7 @@ function CM = extract_colormap(imagePath, numColor)
     % Set a default colorNum if not provided
 
     if nargin < 1 || isempty(imagePath)
-        imagePath = '.\external\slanColor\自然配色\gallery\4.jpg';  % Default to 256 colors, like turbo or hot in MATLAB
+        imagePath = '.\external\slanColor\鑷劧閰嶈壊\gallery\4.jpg';  % Default to 256 colors, like turbo or hot in MATLAB
     end
     if nargin < 2 || isempty(numColor)
         numColor = 256;  % Default to 256 colors, like turbo or hot in MATLAB

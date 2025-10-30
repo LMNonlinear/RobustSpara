@@ -1,3 +1,10 @@
+﻿% Author: Ying Wang, Min Li
+% Create Time: 2025
+% Copyright (c): 2020-2025 Ying Wang, yingwangrigel@gmail.com,
+%                Min Li, minli.231314@gmail.com
+% Joint China-Cuba LAB, UESTC, Hangzhou Dianzi University
+% License: GNU General Public License v3.0 (see LICENSE file)
+
 function [x,lb,ub,parainfo]=remove_fixed_para(x,lb,ub)
 nvar=length(x);
 if nvar~=length(lb)||nvar~=length(ub)

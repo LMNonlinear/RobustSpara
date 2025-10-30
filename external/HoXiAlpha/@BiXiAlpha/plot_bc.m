@@ -1,3 +1,10 @@
+﻿% Author: Ying Wang, Min Li
+% Create Time: 2025
+% Copyright (c): 2020-2025 Ying Wang, yingwangrigel@gmail.com,
+%                Min Li, minli.231314@gmail.com
+% Joint China-Cuba LAB, UESTC, Hangzhou Dianzi University
+% License: GNU General Public License v3.0 (see LICENSE file)
+
 function plot_bc(self,comp,op,cmpath)
 % if nargin<2||isempty(type)
 %     type='bc';
@@ -40,7 +47,7 @@ if sum(bc>0,"all")&&sum(bc<0,"all")
     % c.Ticks = -0.6:0.1:0.6;
     if isempty(cmpath)
         % %{
-        cmpath=['.\external\slanColor\自然配色\gallery\',num2str(5),'.jpg'];
+        cmpath=['.\external\slanColor\鑷劧閰嶈壊\gallery\',num2str(5),'.jpg'];
         colorNum=256;
         CM = extract_colormap(cmpath, colorNum);
         colormap(flip(CM,1))
@@ -57,7 +64,7 @@ else
     cbh = colorbar('h');
     get(get(cbh, 'Children'))
     if isempty(cmpath)
-        % cmpath=['.\external\slanColor\自然配色\gallery\',num2str(4),'.jpg'];
+        % cmpath=['.\external\slanColor\鑷劧閰嶈壊\gallery\',num2str(4),'.jpg'];
         % colorNum=256;
         % CM = extract_colormap(cmpath, colorNum);
         % colormap(flip(CM,1))
@@ -98,6 +105,7 @@ end
 % function plot_bchat(self)
 % surfbc(self.fx,self.fy,abs(self.bchat));
 % end
+
 
 
 

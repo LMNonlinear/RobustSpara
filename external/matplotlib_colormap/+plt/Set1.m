@@ -1,10 +1,17 @@
+% Author: Ying Wang, Min Li
+% Create Time: 2025
+% Copyright (c): 2020-2025 Ying Wang, yingwangrigel@gmail.com,
+%                Min Li, minli.231314@gmail.com
+% Joint China-Cuba LAB, UESTC, Hangzhou Dianzi University
+% License: GNU General Public License v3.0 (see LICENSE file)
+
 function map = Set1(N)
-% MatPlotLib 3.3 ÅäÉ«·½°¸
-% ÊäÈë:
-% N   -  ¶¨Òåcolormap³¤¶ÈµÄÕûÊý£¨N>=0£©£»ÈôÎª¿Õ£¬ÔòÎªµ±Ç°Í¼´°colormap³¤¶È
+% MatPlotLib 3.3 é…è‰²æ–¹æ¡ˆ
+% è¾“å…¥:
+% N   -  å®šä¹‰colormapé•¿åº¦çš„æ•´æ•°ï¼ˆN>=0ï¼‰ï¼›è‹¥ä¸ºç©ºï¼Œåˆ™ä¸ºå½“å‰å›¾çª—colormapé•¿åº¦
 %
-% Êä³ö:
-% map -  Nx3µÄRGBÑÕÉ«¾ØÕó
+% è¾“å‡º:
+% map -  Nx3çš„RGBé¢œè‰²çŸ©é˜µ
 %
 % Copyright  2020   Akun
 % https://zhuanlan.zhihu.com/c_1074615528869531648
@@ -22,6 +29,6 @@ map = C(1+mod(0:N-1,size(C,1)),:);
 end
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%
-% ÖÆ×÷£º°¢À¥            %%%
-% ¹«ÖÚºÅ£º°¢À¥µÄ¿ÆÑÐÈÕ³£ %%%
+% åˆ¶ä½œï¼šé˜¿æ˜†            %%%
+% å…¬ä¼—å·ï¼šé˜¿æ˜†çš„ç§‘ç ”æ—¥å¸¸ %%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%

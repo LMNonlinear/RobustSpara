@@ -1,3 +1,10 @@
+﻿% Author: Ying Wang, Min Li
+% Create Time: 2025
+% Copyright (c): 2020-2025 Ying Wang, yingwangrigel@gmail.com,
+%                Min Li, minli.231314@gmail.com
+% Joint China-Cuba LAB, UESTC, Hangzhou Dianzi University
+% License: GNU General Public License v3.0 (see LICENSE file)
+
 function init_bs(self)
 
 init_para_bs(self);
@@ -49,3 +56,4 @@ self.para_bs.kernel.para.h(isnan(self.para_bs.kernel.para.h)) = 0;
 idx_triu = logical(mat2triu(true(size(self.para_bs.kernel.para.h)), 1, false));
 self.para_bs.kernel.para.h(idx_triu) = 0;
 end
+

@@ -1,3 +1,10 @@
+﻿% Author: Ying Wang, Min Li
+% Create Time: 2025
+% Copyright (c): 2020-2025 Ying Wang, yingwangrigel@gmail.com,
+%                Min Li, minli.231314@gmail.com
+% Joint China-Cuba LAB, UESTC, Hangzhou Dianzi University
+% License: GNU General Public License v3.0 (see LICENSE file)
+
 function penalty = calc_penalty(self, para_xi, para_alpha, para_bs)
 
 if ~isempty(self.lambda) && ((isscalar(self.lambda) && self.lambda ~= 0) || length(self.lambda) > 1)
@@ -64,3 +71,4 @@ else
 end
 
 end
+

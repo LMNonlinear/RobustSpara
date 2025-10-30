@@ -1,3 +1,10 @@
+﻿% Author: Ying Wang, Min Li
+% Create Time: 2025
+% Copyright (c): 2020-2025 Ying Wang, yingwangrigel@gmail.com,
+%                Min Li, minli.231314@gmail.com
+% Joint China-Cuba LAB, UESTC, Hangzhou Dianzi University
+% License: GNU General Public License v3.0 (see LICENSE file)
+
 function trend = fit_trend(self)
 % fit trend later use this trend to get the parameter of xi
 
@@ -16,3 +23,4 @@ trend = exp(trend(:));
 % figure(101);plot(log10([self.s,trend]));hold on
 
 end
+

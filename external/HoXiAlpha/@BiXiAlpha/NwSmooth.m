@@ -1,3 +1,10 @@
+﻿% Author: Ying Wang, Min Li
+% Create Time: 2025
+% Copyright (c): 2020-2025 Ying Wang, yingwangrigel@gmail.com,
+%                Min Li, minli.231314@gmail.com
+% Joint China-Cuba LAB, UESTC, Hangzhou Dianzi University
+% License: GNU General Public License v3.0 (see LICENSE file)
+
 function [yq, L, dbg] = NwSmooth(x, y, h, xq)
 
 if nargin < 4 || isempty(xq)
@@ -46,3 +53,4 @@ function u = gaussian_kernel(u, b)
 u = u ./ b;
 u = (1 / sqrt(2 * pi)) * exp(-0.5 * sum((u .^ 2), 3));
 end
+

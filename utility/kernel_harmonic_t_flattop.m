@@ -1,3 +1,10 @@
+﻿% Author: Ying Wang, Min Li
+% Create Time: 2025
+% Copyright (c): 2020-2025 Ying Wang, yingwangrigel@gmail.com,
+%                Min Li, minli.231314@gmail.com
+% Joint China-Cuba LAB, UESTC, Hangzhou Dianzi University
+% License: GNU General Public License v3.0 (see LICENSE file)
+
 function [y, ycomp] = kernel_harmonic_t_flattop(x, h, mu, sigma, nu, d, b)
 % D = bs_dist(x, mu(imu, :), Sigma(:, :, idsigma), nu(idsigma));
 % p = size(x, 2);

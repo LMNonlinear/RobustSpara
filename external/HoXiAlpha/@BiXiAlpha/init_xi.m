@@ -1,3 +1,10 @@
+﻿% Author: Ying Wang, Min Li
+% Create Time: 2025
+% Copyright (c): 2020-2025 Ying Wang, yingwangrigel@gmail.com,
+%                Min Li, minli.231314@gmail.com
+% Joint China-Cuba LAB, UESTC, Hangzhou Dianzi University
+% License: GNU General Public License v3.0 (see LICENSE file)
+
 function init_xi(self)
 %% fit the trend
 % self.trend=fit_trend(self);
@@ -32,6 +39,7 @@ end
 % plot(self.f,self.s);hold on;
 % plot(self.f,self.trend);
 % plot(self.f,studentt_waveform(self.f,self.para_xi.kernel.para.h,self.para_xi.kernel.para.sigma,self.para_xi.kernel.para.nu,self.para_xi.kernel.para.mu));hold on
+
 
 
 
