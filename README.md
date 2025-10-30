@@ -1,4 +1,4 @@
-# RobustXiAlpha
+# Robust Spectral Parametrization 
 % Author: Ying Wang, Min Li
 % Create Time: 2025
 % Copyright (c): 2020-2025 Ying Wang, yingwangrigel@gmail.com,
@@ -6,7 +6,7 @@
 % Joint China-Cuba LAB, UESTC, Hangzhou Dianzi Univerisity 
 % License: GNU General Public License v3.0 (see LICENSE file)
 
-RobustSpecPara is a MATLAB toolbox for robustly decomposing quantitative EEG (qEEG) power spectra into aperiodic (``\xi``) and oscillatory (alpha-band) constituents. It wraps the `BiXiAlpha` class and several companion utilities that smooth spectra, initialize non-linear fits, and export parameter tables for downstream normative modelling.
+RobustSpecPara is a MATLAB toolbox for robustly decomposing EEG power spectra into aperiodic (``\xi``) and oscillatory (alpha-band) constituents. It initialize non-linear fits, and export parameter tables for downstream parameterization normative EEG (https://github.com/LMNonlinear/AP-qEEG).
 
 ## Highlights
 - Implements Lorentzian aperiodic and Gaussian oscillatory kernels that are jointly optimized with Levenberg-Marquardt for stable estimates of the ``\xi`` slope, offsets, peak frequency, bandwidth, and power.
@@ -15,6 +15,7 @@ RobustSpecPara is a MATLAB toolbox for robustly decomposing quantitative EEG (qE
 
 
 ## Methodological Context
+! [RobustSpecPara(./image/RobustSpecPara.png)
 
 ### Robust EEG Spectral Parametrization
 RobustSpecPara implements a principled approach to decompose EEG power spectra into two fundamental components:
