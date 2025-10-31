@@ -15,7 +15,8 @@ RobustSpecPara is a MATLAB toolbox for robustly decomposing EEG power spectra in
 
 
 ## Methodological Context
-! [RobustSpecPara](./image/readme/RobustSpecPara.png)
+
+![RobustSpecPara](./image/readme/RobustSpecPara.png)
 
 ### Robust EEG Spectral Parametrization
 RobustSpecPara implements a principled approach to decompose EEG power spectra into two fundamental components:
