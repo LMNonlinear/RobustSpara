@@ -61,6 +61,7 @@ __pycache__
 *.json
 *.prj
 !image/readme/*.png
+!data
 *.slxc
 slprj
 *.acq
